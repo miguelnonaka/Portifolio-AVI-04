@@ -148,5 +148,48 @@ app.delete('/disciplinas/:id', (req, res) => {
   res.redirect('/disciplinas');
 });
 
+// --- Rotas da API (JSON) ---
+app.get('/api/disciplinas', (req, res) => {
+  const disciplinas = readDisciplinas();
+  res.json(disciplinas);
+});
+
+app.post('/api/disciplinas', (req, res) => {
+  const disciplinas = readDisciplinas();
+  const nextId = disciplinas.length > 0 ? Math.max(...disciplinas.map(d => d.id)) + 1 : 1;
+  const nome = req.body.nome?.trim();
+  if (nome) {
+    const novaDisciplina = { id: nextId, nome };
+    disciplinas.push(novaDisciplina);
+    writeDisciplinas(disciplinas);
+    return res.status(201).json(novaDisciplina);
+  }
+  res.status(400).json({ error: 'Nome inválido' });
+});
+
+app.put('/api/disciplinas/:id', (req, res) => {
+  const disciplinas = readDisciplinas();
+  const id = parseInt(req.params.id);
+  const disciplina = disciplinas.find(d => d.id === id);
+  const nome = req.body.nome?.trim();
+  if (disciplina && nome) {
+    disciplina.nome = nome;
+    writeDisciplinas(disciplinas);
+    return res.json(disciplina);
+  }
+  res.status(400).json({ error: 'Disciplina não encontrada ou nome inválido' });
+});
+
+app.delete('/api/disciplinas/:id', (req, res) => {
+  let disciplinas = readDisciplinas();
+  const id = parseInt(req.params.id);
+  const exists = disciplinas.some(d => d.id === id);
+  if (!exists) return res.status(404).json({ error: 'Disciplina não encontrada' });
+
+  disciplinas = disciplinas.filter(d => d.id !== id);
+  writeDisciplinas(disciplinas);
+  res.json({ message: 'Disciplina removida', id });
+});
+
 // --- Servidor ---
 app.listen(port, () => console.log(`✅ Servidor rodando em http://localhost:${port}`));
