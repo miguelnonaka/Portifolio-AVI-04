@@ -1,0 +1,93 @@
+create database avi4;
+use avi4;
+
+-- =============================================
+-- TABELA: disciplinas
+-- =============================================
+CREATE TABLE disciplinas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    -- Índice para melhor performance em buscas
+    INDEX idx_nome (nome)
+);
+
+-- =============================================
+-- TABELA: projetos
+-- =============================================
+CREATE TABLE projetos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    participacao TEXT NOT NULL,
+    imagem VARCHAR(500) NULL,
+    concluido BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    -- Índices para melhor performance
+    INDEX idx_nome (nome),
+    INDEX idx_concluido (concluido)
+);
+
+-- =============================================
+-- DADOS INICIAIS: disciplinas
+-- =============================================
+INSERT INTO disciplinas (nome) VALUES
+('Algoritmos e Lógica de Programação'),
+('Banco de Dados'),
+('Desenvolvimento Web I'),
+('Engenharia de Software I'),
+('Matemática para Computação'),
+('Estrutura de Dados'),
+('Desenvolvimento Web II'),
+('Redes de Computadores'),
+('Sistemas Operacionais'),
+('Mobile Development'),
+('Inteligência Artificial'),
+('Machine Learning'),
+('Desenvolvimento Ágil'),
+('Testes de Software'),
+('Arquitetura de Software');
+
+-- =============================================
+-- DADOS INICIAIS: projetos
+-- =============================================
+INSERT INTO projetos (nome, descricao, participacao, imagem, concluido) VALUES
+('🔍 Reconhecimento de Lixo com YOLOv8', 'Sistema de visão computacional que detecta diferentes tipos de resíduos para auxiliar na reciclagem automatizada.', 'Treinei o modelo YOLOv8, realizei testes com imagens reais e adaptei o modelo para uso em dispositivos móveis.', NULL, TRUE),
+('📱 App Mobile para leitura de Kanjis com IA', 'Aplicativo Android que utiliza um modelo de machine learning para identificar e traduzir Kanjis através da câmera.', 'Desenvolvi a interface, integrei o TensorFlow Lite ao app e realizei testes com usuários reais.', 'images/tcc.jpeg', TRUE),
+('🎮 Jogos em Unity', 'Desenvolvimento de uma Visual Novel, um FPS e um Bomberman Online como projetos de estudo e prática com Unity e C#.', 'Criação de mecânicas de gameplay, UI e multiplayer usando Mirror Networking.', 'images/image (1).png', TRUE),
+('🧮 Validador de CPF em Python e C', 'Ferramenta simples para validar números de CPF com base no cálculo dos dígitos verificadores.', 'Desenvolvi a lógica em Python e fiz a conversão para linguagem C para comparar desempenho.', NULL, TRUE),
+('🌐 API RESTful com PHP, MySQL e JavaScript', 'API completa para CRUD de usuários, com banco de dados relacional e integração front-end.', 'Desenvolvi toda a API, modelei o banco de dados e criei uma interface web funcional.', NULL, TRUE),
+('🌐 API Kernel Panic - FATEC', 'Plataforma para análise gráfica de exportações e importações realizadas pelo Estado de São Paulo entre os anos de 2013 e 2023.', 'Desenvolvi as primeiras querys iniciais para receber os dados dos bancos. Criação e host das docker images do projeto no AWS', NULL, TRUE),
+('🤖 Chatbot com Node.js', 'Chatbot inteligente para atendimento ao cliente utilizando processamento de linguagem natural.', 'Desenvolvi a arquitetura do bot, integrei com APIs externas e implementei o sistema de diálogo.', NULL, FALSE),
+('📊 Dashboard Analytics', 'Sistema de dashboard para análise de métricas de negócio em tempo real.', 'Criei visualizações interativas, otimizei queries e implementei atualização em tempo real.', NULL, FALSE);
+
+-- =============================================
+-- CONSULTAS DE VERIFICAÇÃO
+-- =============================================
+
+-- Verifica as disciplinas inseridas
+SELECT '=== DISCIPLINAS ===' as '';
+SELECT * FROM disciplinas;
+
+-- Verifica os projetos inseridos
+SELECT '=== PROJETOS ===' as '';
+SELECT id, nome, concluido FROM projetos;
+
+-- Estatísticas
+SELECT '=== ESTATÍSTICAS ===' as '';
+SELECT 
+    (SELECT COUNT(*) FROM disciplinas) as total_disciplinas,
+    (SELECT COUNT(*) FROM projetos) as total_projetos,
+    (SELECT COUNT(*) FROM projetos WHERE concluido = TRUE) as projetos_concluidos,
+    (SELECT COUNT(*) FROM projetos WHERE concluido = FALSE) as projetos_andamento;
+
+-- =============================================
+-- PRIVILÉGIOS (OPCIONAL - para criar usuário)
+-- =============================================
+-- CREATE USER 'portfolio_user'@'localhost' IDENTIFIED BY 'portfolio123';
+-- GRANT ALL PRIVILEGES ON portfolio_db.* TO 'portfolio_user'@'localhost';
+-- FLUSH PRIVILEGES;
