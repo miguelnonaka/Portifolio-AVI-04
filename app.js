@@ -2,6 +2,17 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const methodOverride = require('method-override');
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize({
+  database: 'avi4',
+  username: 'root',
+  password: 'Tomilho@0',
+  host: 'localhost',
+  dialect: 'mysql',
+  logging: false, // Defina como true se quiser ver os logs SQL
+});
+
 
 const app = express();
 const port = 3000;
