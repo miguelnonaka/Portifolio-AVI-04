@@ -268,20 +268,18 @@ app.get('/api/projetos', async (req, res) => {
 async function initializeDatabase() {
   try {
     await sequelize.authenticate();
-    console.log('✅ Conexão com MySQL estabelecida com sucesso.');
+    console.log('Conexão com MySQL estabelecida com sucesso.');
     
     await sequelize.sync({ force: false });
-    console.log('✅ Modelos sincronizados com o banco de dados.');
+    console.log('Modelos sincronizados com o banco de dados.');
     
     await seedInitialData();
     
     app.listen(port, () => {
-      console.log(`✅ Servidor rodando em http://localhost:${port}`);
-      console.log(`📊 Acesse o dashboard: http://localhost:${port}/dashboard`);
-      console.log(`📚 Acesse as disciplinas: http://localhost:${port}/disciplinas`);
+      console.log(`Servidor rodando em http://localhost:${port}`);
     });
   } catch (error) {
-    console.error('❌ Erro ao inicializar a aplicação:', error);
+    console.error('Erro ao inicializar a aplicação:', error);
     process.exit(1);
   }
 }
